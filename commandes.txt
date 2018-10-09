@@ -1,0 +1,62 @@
+echo "# jenkins" >> README.md
+git init
+git add .
+git commit -m "first commit"
+git remote add origin https://github.com/florianmaire/jenkins.git
+git config --global http.proxy http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080
+git push -u origin master
+
+sudo -i
+vi /etc/bash.bashrc
+
+export http_proxy=http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080
+export https_proxy=http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080
+
+
+vi /etc/environment
+
+
+export http_proxy=http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080
+export https_proxy=http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080
+
+
+vi /etc/apt/apt.conf
+
+
+Acquire::http::Proxy "http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080";
+Acquire::https::Proxy "http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080";
+
+vi /etc/yum.conf
+[main]
+
+proxy=http://surf-sccc.pasi.log.intra.laposte.fr:8080
+proxy_username=userProxy
+proxy_password=passwordProxy
+
+vi /etc/wgetrc
+http_proxy = http://surf-sccc.pasi.log.intra.laposte.fr:8080
+use_proxy = on
+proxy-user = userProxy
+proxy-password = passwordProxy
+
+curl --proxy "http://userProxy:passwordProxy@surf-sccc.pasi.log.intra.laposte.fr:8080" http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+
+
+export https_proxy=http://proxy:8080/
+
+
+java -Dhttp.proxyHost=surf-sccc.pasi.log.intra.laposte.fr -Dhttp.proxyPort=8080 -Djdk.http.auth.tunneling.disabledSchemes="" -Djdk.http.auth.proxying.disabledSchemes="" -jar jenkins.war
+
+
+java -Dhttp.proxyHost=surf-sccc.pasi.log.intra.laposte.fr -Dhttp.proxyPort=8080 -Dhttp.proxyUser=userProxy -Dhttp.proxyPassword=passwordProxy  -Djdk.http.auth.tunneling.disabledSchemes="" -Djdk.http.auth.proxying.disabledSchemes="" -jar jenkins.war
+
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+DNS1=dc.courrier.intra.laposte.fr
+
+vi /etc/resolv.conf
+
+
+
+
+
+wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
